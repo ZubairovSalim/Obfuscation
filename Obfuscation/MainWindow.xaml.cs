@@ -13,7 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
-
+using winForms = System.Windows.Forms;
+using System.IO;
+using System.Diagnostics;
 
 namespace Obfuscation
 {
@@ -76,7 +78,7 @@ namespace Obfuscation
                 string pat1 = m.Value;
                 Regex r1 = new Regex(pat1);
                 MatchCollection mats1 = r1.Matches(code);
-                result = r1.Replace(result,"_"+count.ToString());
+                result = r1.Replace(result,"_"+count.ToString()+"_");
                 count++;
             }
 
@@ -118,7 +120,7 @@ namespace Obfuscation
 
             for(int i = 0;i<Strings.Count;i++)
             {
-                result = result.Replace("_" + i, Strings[i]);
+                result = result.Replace("_" + i+"_", Strings[i]);
             }
 
             return result;           
@@ -159,8 +161,17 @@ namespace Obfuscation
                 string pattern1 = @"(?<!\\w)" + m.Value + "(?!\\w)";
                 Regex reg1 = new Regex(pattern1);
                 MatchCollection matches1 = reg1.Matches(code);
-                result = reg1.Replace(result, "Decrypt("+'\u0022'+ s+'\u0022'+")");
+                result = reg1.Replace(result, "Decrypt("+'\u0022'+ s+'\u0022'+",17)");
             }
+
+            Regex r1 = new Regex(@"int main\(\)");
+            MatchCollection m1 = r1.Matches(result);
+            result = r1.Replace(result, "string Decrypt(string text, int key){string result = text;string Alphabet = "+'\u0022'+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _.,!?:;><=+-*"+'\u0022'+"; for (int i = 0; i < text.length(); i++){result[i] = Alphabet[(Alphabet.length() + (Alphabet.find(text[i]) - key)) % Alphabet.length()];}return result;}int main()");
+
+            Regex r2 = new Regex(@"#include <iostream>");
+            MatchCollection m2 = r2.Matches(result);
+            result = r2.Replace(result, "#include <iostream>#include <string>using namespace std;");
+
 
             return result;
         }
@@ -173,7 +184,60 @@ namespace Obfuscation
             resultCode = ReplaceIdentifiers(resultCode);
             txb_ObfuscatedCode.Text = EncryptStrings(resultCode);
         }
+
+        private void btn_Save_Click(object sender, RoutedEventArgs e)
+        {
+            winForms.SaveFileDialog save = new winForms.SaveFileDialog();
+            save.DefaultExt = ".cpp";
+
+            if (save.ShowDialog() == winForms.DialogResult.OK)
+            {
+                if((sender as Button).Name=="btn_Save1")
+                {
+                    File.WriteAllText(save.FileName, txb_OriginalCode.Text, Encoding.Default);
+                    txb_OriginalPath.Text = save.FileName;
+                }
+                else
+                {
+                    File.WriteAllText(save.FileName, txb_ObfuscatedCode.Text, Encoding.Default);
+                    txb_ObfuscatedPath.Text = save.FileName;
+                }
+                
+            }
+        }
+
+        private void btn_Run_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button).Name == "btn_Run1")
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = "cmd.exe";
+                p.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(txb_OriginalPath.Text);
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.UseShellExecute = false;
+
+                p.Start();
+                p.StandardInput.WriteLine("\"" + @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat" + "\"");
+                p.StandardInput.WriteLine(@"cl.exe /nologo /EHsc " + System.IO.Path.GetFileName(txb_OriginalPath.Text));
+
+                //p.StandardInput.WriteLine(@"exit");
+                //p.WaitForExit();
+                //p.Close();
+
+
+                //string OriginalPathExe = System.IO.Path.GetDirectoryName(txb_OriginalPath.Text) + "\\" + System.IO.Path.GetFileNameWithoutExtension(txb_OriginalPath.Text) + ".exe";
+                //Process.Start(@"C:\MinGW\\bin\g++.exe", txb_OriginalPath.Text+ " -o "+OriginalPathExe+ " -static-libstdc++-6 -static-libgcc_s_dw2-1");
+                //Process.Start(OriginalPathExe);
+
+            }
+            else
+            {
+                //string ObfuscatedPathExe = System.IO.Path.GetDirectoryName(txb_ObfuscatedPath.Text) + "\\" + System.IO.Path.GetFileNameWithoutExtension(txb_ObfuscatedPath.Text) + ".exe";
+                //Process.Start("C:\\MinGW\\bin\\g++ " + txb_ObfuscatedPath + " " + ObfuscatedPathExe);
+                //Process.Start(ObfuscatedPathExe);
+            }
+        }
+
     }
 }
-
-//string Decr = "char[] Decrypt(char[] text, int key){char[] Alphabet = "+'\u0022'+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _.,!?:;><=+-*"+'\u0022'+";char[] result = new char[sizeof(text) / sizeof(int)];for (int i = 0; i < text.Length; i++){result[i] = Alphabet[(strlen(Alphabet) + (Alphabet.find(text[i]) - key)) % strlen(Alphabet)];}return result;}";

@@ -5,12 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Obfuscation"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="610">
+        Title="MainWindow" Height="568.093" Width="610">
     <StackPanel>
         <StackPanel Orientation="Horizontal" Height="400" Margin="0,0,0,20">
             <TextBox x:Name="txb_OriginalCode" Width="290" Margin="0,0,20,0" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
             <TextBox x:Name="txb_ObfuscatedCode" Width="290" AcceptsReturn="True" TextWrapping="Wrap"></TextBox>
         </StackPanel>
-        <Button x:Name="btn_Obfuscate" Height="30" Width="200" Click="btn_Obfuscate_Click">Обфусцировать</Button>
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="btn_Save1" Height="30" Width="200" Click="btn_Save_Click">Сохранить исходный код</Button>
+            <Button x:Name="btn_Obfuscate" Height="30" Width="200" Click="btn_Obfuscate_Click">Обфусцировать</Button>
+            <Button x:Name="btn_Save2" Height="30" Width="200" Click="btn_Save_Click">Сохранить обфусцированный код</Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBox x:Name="txb_OriginalPath" Width="280" Margin="0,0,40,0"></TextBox>
+            <TextBox x:Name="txb_ObfuscatedPath" Width="280"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="btn_Run1" Height="30" Width="200" Margin="100,0,0,0" Click="btn_Run_Click">Запустить исходный код</Button>
+            <Button x:Name="btn_Run2" Height="30" Width="200" Click="btn_Run_Click">Запустить обфусцированный код</Button>
+        </StackPanel>
     </StackPanel>
 </Window>
