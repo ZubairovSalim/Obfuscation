@@ -82,7 +82,7 @@ namespace Obfuscation
                 count++;
             }
 
-            List<string> KeyWords = new List<string>() { "int", "char", "double", "float", "bool", "void", "class", "struct", "long", "enum", "short","\\[\\]" };
+            List<string> KeyWords = new List<string>() { "int", "char", "double", "float", "bool", "void", "class", "struct", "long", "enum", "short","\\[\\]" };            
 
             string Alphabet = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -154,26 +154,37 @@ namespace Obfuscation
             
             foreach(Match m in matches)
             {
-                string s = m.Value.Remove(0, 1);
-                s = s.Remove(s.Length - 1, 1);
-                s = Encrypt(s, 17);
+                if (m.Value != "\"pause\"")
+                {
+                    string s = m.Value.Remove(0, 1);
+                    s = s.Remove(s.Length - 1, 1);
+                    s = Encrypt(s, 17);
 
-                string pattern1 = @"(?<!\\w)" + m.Value + "(?!\\w)";
-                Regex reg1 = new Regex(pattern1);
-                MatchCollection matches1 = reg1.Matches(code);
-                result = reg1.Replace(result, "Decrypt("+'\u0022'+ s+'\u0022'+",17)");
+                    string pattern1 = @"(?<!\\w)" + m.Value + "(?!\\w)";
+                    Regex reg1 = new Regex(pattern1);
+                    MatchCollection matches1 = reg1.Matches(code);
+                    result = reg1.Replace(result, "Decrypt(" + '\u0022' + s + '\u0022' + ",17)");
+                }
             }
-
-            Regex r1 = new Regex(@"int main\(\)");
-            MatchCollection m1 = r1.Matches(result);
-            result = r1.Replace(result, "string Decrypt(string text, int key){string result = text;string Alphabet = "+'\u0022'+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _.,!?:;><=+-*"+'\u0022'+"; for (int i = 0; i < text.length(); i++){result[i] = Alphabet[(Alphabet.length() + (Alphabet.find(text[i]) - key)) % Alphabet.length()];}return result;}int main()");
 
             Regex r2 = new Regex(@"#include <iostream>");
             MatchCollection m2 = r2.Matches(result);
-            result = r2.Replace(result, "#include <iostream>#include <string>using namespace std;");
+            result = r2.Replace(result, "#include <iostream>#include <string>");
 
+            Regex r1 = new Regex(@"using namespace std;");
+            MatchCollection m1 = r1.Matches(result);
+            result = r1.Replace(result, "using namespace std;string Decrypt(string text, int key){string result = text;string Alphabet = "+'\u0022'+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _.,!?:;><=+-*"+'\u0022'+"; for (int i = 0; i < text.length(); i++){result[i] = Alphabet[(Alphabet.length() + (Alphabet.find(text[i]) - key)) % Alphabet.length()];}return result;}");
 
             return result;
+        }
+        private void btn_AddOriginalCode_Click(object sender, RoutedEventArgs e)
+        {
+            winForms.OpenFileDialog opn = new winForms.OpenFileDialog();
+            opn.Filter = "Text Files(*.cpp) | *.cpp";
+            if (opn.ShowDialog() == winForms.DialogResult.OK)
+            {
+                txb_OriginalCode.Text = File.ReadAllText(opn.FileName, Encoding.Default);
+            }
         }
 
         private void btn_Obfuscate_Click(object sender, RoutedEventArgs e)
@@ -210,32 +221,25 @@ namespace Obfuscation
         {
             if ((sender as Button).Name == "btn_Run1")
             {
+                string OriginalPathExe = System.IO.Path.GetDirectoryName(txb_OriginalPath.Text) + "\\" + System.IO.Path.GetFileNameWithoutExtension(txb_OriginalPath.Text) + ".exe";
                 Process p = new Process();
-                p.StartInfo.FileName = "cmd.exe";
                 p.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(txb_OriginalPath.Text);
-                p.StartInfo.RedirectStandardInput = true;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.UseShellExecute = false;
-
+                p.StartInfo.FileName = @"C:\MinGW\bin\g++.exe";                
+                p.StartInfo.Arguments = System.IO.Path.GetFileName(txb_OriginalPath.Text)+" -o "+ System.IO.Path.GetFileNameWithoutExtension(txb_OriginalPath.Text)+".exe";
                 p.Start();
-                p.StandardInput.WriteLine("\"" + @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat" + "\"");
-                p.StandardInput.WriteLine(@"cl.exe /nologo /EHsc " + System.IO.Path.GetFileName(txb_OriginalPath.Text));
-
-                //p.StandardInput.WriteLine(@"exit");
-                //p.WaitForExit();
-                //p.Close();
-
-
-                //string OriginalPathExe = System.IO.Path.GetDirectoryName(txb_OriginalPath.Text) + "\\" + System.IO.Path.GetFileNameWithoutExtension(txb_OriginalPath.Text) + ".exe";
-                //Process.Start(@"C:\MinGW\\bin\g++.exe", txb_OriginalPath.Text+ " -o "+OriginalPathExe+ " -static-libstdc++-6 -static-libgcc_s_dw2-1");
-                //Process.Start(OriginalPathExe);
-
+                p.WaitForExit();
+                Process.Start(OriginalPathExe);
             }
             else
             {
-                //string ObfuscatedPathExe = System.IO.Path.GetDirectoryName(txb_ObfuscatedPath.Text) + "\\" + System.IO.Path.GetFileNameWithoutExtension(txb_ObfuscatedPath.Text) + ".exe";
-                //Process.Start("C:\\MinGW\\bin\\g++ " + txb_ObfuscatedPath + " " + ObfuscatedPathExe);
-                //Process.Start(ObfuscatedPathExe);
+                string ObfuscatedPathExe = System.IO.Path.GetDirectoryName(txb_ObfuscatedPath.Text) + "\\" + System.IO.Path.GetFileNameWithoutExtension(txb_ObfuscatedPath.Text) + ".exe";
+                Process p = new Process();
+                p.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(txb_ObfuscatedPath.Text);
+                p.StartInfo.FileName = @"C:\MinGW\bin\g++.exe";
+                p.StartInfo.Arguments = System.IO.Path.GetFileName(txb_ObfuscatedPath.Text) + " -o " + System.IO.Path.GetFileNameWithoutExtension(txb_ObfuscatedPath.Text) + ".exe";
+                p.Start();
+                p.WaitForExit();
+                Process.Start(ObfuscatedPathExe);
             }
         }
 

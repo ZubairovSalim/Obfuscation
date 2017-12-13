@@ -12,3 +12,18 @@ C:\Users\Mr.Sali\Documents\Visual Studio 2017\Projects\Obfuscation\Obfuscation\o
 C:\Users\Mr.Sali\Documents\Visual Studio 2017\Projects\Obfuscation\Obfuscation\obj\Debug\Obfuscation.csproj.GenerateResource.Cache
 C:\Users\Mr.Sali\Documents\Visual Studio 2017\Projects\Obfuscation\Obfuscation\obj\Debug\Obfuscation.exe
 C:\Users\Mr.Sali\Documents\Visual Studio 2017\Projects\Obfuscation\Obfuscation\obj\Debug\Obfuscation.pdb
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\bin\Debug\Obfuscation.exe.config
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\bin\Debug\Obfuscation.exe
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\bin\Debug\Obfuscation.pdb
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\Obfuscation.csprojResolveAssemblyReference.cache
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\MainWindow.g.cs
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\App.g.cs
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\Obfuscation_MarkupCompile.cache
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\Obfuscation_MarkupCompile.lref
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\MainWindow.baml
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\Obfuscation.g.resources
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\Obfuscation.Properties.Resources.resources
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\Obfuscation.csproj.GenerateResource.Cache
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\Obfuscation.csproj.CoreCompileInputs.cache
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\Obfuscation.exe
+C:\Users\Salim\Desktop\sali\ОГУ\ОИБ\Лаб6\Obfuscation\Obfuscation\obj\Debug\Obfuscation.pdb
